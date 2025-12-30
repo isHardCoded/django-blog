@@ -1,0 +1,44 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Поиск{% if query %}: {{ query }}{% endif %} - Мой блог{% endblock %}
+
+{% block content %}
+    <h1>Результаты поиска{% if query %}: "{{ query }}"{% endif %}</h1>
+    
+    {% if query %}
+        {% if articles %}
+            <p style="color: #7f8c8d; margin-bottom: 20px;">
+                Найдено статей: {{ articles|length }}
+            </p>
+            
+            {% for article in articles %}
+                <article>
+                    <h2><a href="{% url 'blog:article_detail' article.id %}">{{ article.title }}</a></h2>
+                    <p class="article-meta">
+                        Автор: {{ article.author.username }} | 
+                        Дата: {{ article.published_date|date:"d.m.Y" }}
+                    </p>
+                    
+                    <p>{{ article.content|truncatewords:30 }}</p>
+                    
+                    <div class="tags">
+                        Теги: 
+                        {% for tag in article.tags.all %}
+                            <a href="{% url 'blog:tag_articles' tag.slug %}" class="tag">#{{ tag.name }}</a>
+                        {% empty %}
+                            <span style="color: #7f8c8d;">без тегов</span>
+                        {% endfor %}
+                    </div>
+                </article>
+            {% endfor %}
+        {% else %}
+            <div class="empty-message">
+                <p>По вашему запросу ничего не найдено.</p>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="empty-message">
+            <p>Введите поисковый запрос.</p>
+        </div>
+    {% endif %}
+{% endblock %}
