@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Q, Avg
 from django.db.models.functions import Length
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .models import Article, Tag
+
+User = get_user_model()
 
 def home(request):
     articles = Article.objects.published().with_author_and_tags().recent_first()[:20]

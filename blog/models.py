@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
@@ -28,6 +28,8 @@ class ArticleQuerySet(models.QuerySet):
    
     def recent_first(self):
         return self.order_by('-created_at')
+
+User = get_user_model()
 
 class Article(TimeStampedModel):
     title = models.CharField(max_length=200, verbose_name='Заголовок')
